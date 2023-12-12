@@ -1,0 +1,1 @@
+void printHangman(int *wrongs);
