@@ -4,5 +4,7 @@ A simple hangman game written in C.
 
 ## Installation
 
-`cmake .`
-`make`
+```bash
+cmake .
+make
+```
