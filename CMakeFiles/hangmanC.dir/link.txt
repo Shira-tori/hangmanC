@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/hangmanC.dir/main.c.o CMakeFiles/hangmanC.dir/printHangman.c.o -o hangmanC 

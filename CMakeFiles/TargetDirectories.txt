@@ -1,0 +1,3 @@
+/home/sean/Data/Sean/hangmanC/CMakeFiles/hangmanC.dir
+/home/sean/Data/Sean/hangmanC/CMakeFiles/edit_cache.dir
+/home/sean/Data/Sean/hangmanC/CMakeFiles/rebuild_cache.dir
