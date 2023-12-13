@@ -12,8 +12,6 @@ void printHangman(int *wrongs){
 			printf("\t|\n");
 			printf("\t|\n");
 			printf("\t|\n");
-			printf("\t|\n");
-			printf("\t|\n");
 			break;
 		case 1:
 			printf("\t___________\n");
@@ -30,7 +28,7 @@ void printHangman(int *wrongs){
 			printf("\t___________\n");
 			printf("\t|         |\n");
 			printf("\t|         O\n");
-			printf("\t|        /|\n");
+			printf("\t|         |\n");
 			printf("\t|         |\n");
 			printf("\t|         |\n");
 			printf("\t|\n");
@@ -41,8 +39,8 @@ void printHangman(int *wrongs){
 			printf("\t___________\n");
 			printf("\t|         |\n");
 			printf("\t|         O\n");
-			printf("\t|        /|\\\n");
-			printf("\t|         |\n");
+			printf("\t|        /|\n");
+			printf("\t|       / |\n");
 			printf("\t|         |\n");
 			printf("\t|\n");
 			printf("\t|\n");
@@ -51,23 +49,34 @@ void printHangman(int *wrongs){
 		case 4:
 			printf("\t___________\n");
 			printf("\t|         |\n");
-			printf("\t|		  O\n");
+			printf("\t|         O\n");
 			printf("\t|        /|\\\n");
+			printf("\t|       / | \\\n");
 			printf("\t|         |\n");
-			printf("\t|         |\n");
-			printf("\t|		 /\n");
-			printf("\t|		/\n");
+			printf("\t|\n");
+			printf("\t|\n");
 			printf("\t|\n");
 			break;
 		case 5:
 			printf("\t___________\n");
 			printf("\t|         |\n");
-			printf("\t|		  O\n");
+			printf("\t|         O\n");
 			printf("\t|        /|\\\n");
-			printf("\t|       / |\\\\\n");
+			printf("\t|       / | \\\n");
 			printf("\t|         |\n");
-			printf("\t|		 / \\\n");
-			printf("\t|		/   \\\\n");
+			printf("\t|        / \n");
+			printf("\t|       /   \n");
+			printf("\t|\n");
+			break;
+		case 6:
+			printf("\t___________\n");
+			printf("\t|         |\n");
+			printf("\t|         O\n");
+			printf("\t|        /|\\\n");
+			printf("\t|       / | \\\n");
+			printf("\t|         |\n");
+			printf("\t|        / \\\n");
+			printf("\t|       /   \\\n");
 			printf("\t|\n");
 			break;
 	}

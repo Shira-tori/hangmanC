@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "headers/printHangman.h"
 
+int main();
+
 void initScreen(int *wrongs, char word[], int *size, char guess[]){
 	system("clear");
 	printf("\t\tH A N G M A N\n");
@@ -11,7 +13,7 @@ void initScreen(int *wrongs, char word[], int *size, char guess[]){
 	printf("\n");
 	for(int i = 0; i < *size; i++){
 		if(word[i] == guess[i]){
-			printf("h%c  ", guess[i]);
+			printf(" %c  ", guess[i]);
 		}
 		else{
 			printf("    ");
@@ -25,25 +27,53 @@ void initScreen(int *wrongs, char word[], int *size, char guess[]){
 }
 
 void checkIfInputisInGuess(char guess[], char word[], char *input, int *size, int *wrongs){
-	for(int i = 0; i < *size; i++){
-		if(word[i] == *input){
+	// TODO: Find out how to check if input is right or wrong.
+	for(int i = 0; word[i] != '\0'; i++){
+		if(word[i] == input[0]){
 			printf("Nice!\n");
-			guess[i] == *input;
+			guess[i] = input[0];
 		}
-		else{
-			wrongs++;
+		else if(i == *size-2){
+			*wrongs = *wrongs + 1;
+		}
+	}
+}
+
+void checkIfWinOrLose(char guess[], char word[], int *wrongs){
+	if(*wrongs == 6){
+		printf("\nGame Over.\n");
+		while(1){
+			printf("Try again?[Y/N]");
+			switch(getchar()){
+				case 'Y':
+				case 'y':
+					while(getchar() != '\n');
+					main();
+					break;
+				case 'N':
+				case 'n':
+					exit(0);
+			}
 		}
 	}
 }
 
 void logic(int *wrongs, char word[], int *size, char guess[]){
 	char input;
+	char buffer;
 	while(1){
 		printf("Guess a letter: ");
-		getchar();
-		scanf("%c", &input);	
+		input = getchar();
+		while((getchar()) != '\n');
 		checkIfInputisInGuess(guess, word, &input, size, wrongs);
+		checkIfWinOrLose(guess, word, wrongs);
 		initScreen(wrongs, word, size, guess);
+	}
+}
+
+void initGuess(char guess[], int *size){
+	for(int i = 0; i < *size; i++){
+		guess[i] = ' ';
 	}
 }
 
@@ -53,9 +83,7 @@ int main(){
 	char word[] = "TANGINA";
 	int size = sizeof(word) / sizeof(char);
 	char guess[size];
-	for(int i = 0; i < size; i++){
-		guess[i] = ' ';
-	}
+	initGuess(guess, &size);
 	initScreen(&wrongs, word, &size, guess);
 	logic(&wrongs, word, &size, guess);
 	return 0;
