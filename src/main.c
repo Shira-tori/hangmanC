@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "../headers/printHangman.h"
 
 int main();
@@ -28,22 +29,25 @@ void initScreen(int *wrongs, char word[], int *size, char guess[]){
 
 void checkIfInputisInGuess(char guess[], char word[], char *input, int *size, int *wrongs){
 	// TODO: Find out how to check if input is right or wrong.
+	bool match = 0;
 	for(int i = 0; word[i] != '\0'; i++){
 		if(word[i] == input[0]){
 			printf("Nice!\n");
 			guess[i] = input[0];
+			match = 1;
 		}
-		else if(i == *size-2){
+		else if(i == *size-2 && match == 0){
 			*wrongs = *wrongs + 1;
 		}
 	}
 }
 
-void checkIfWinOrLose(char guess[], char word[], int *wrongs){
+void checkIfWinOrLose(char guess[], char word[], int *wrongs, int *size){
 	if(*wrongs == 6){
-		printf("\nGame Over.\n");
+		initScreen(wrongs, word, size, guess);
+		printf("Game Over.\n");
 		while(1){
-			printf("Try again?[Y/N]");
+			printf("Try again?[Y/N]: ");
 			switch(getchar()){
 				case 'Y':
 				case 'y':
@@ -54,6 +58,7 @@ void checkIfWinOrLose(char guess[], char word[], int *wrongs){
 				case 'n':
 					exit(0);
 			}
+			while(getchar() != '\n');
 		}
 	}
 }
@@ -66,7 +71,7 @@ void logic(int *wrongs, char word[], int *size, char guess[]){
 		input = getchar();
 		while((getchar()) != '\n');
 		checkIfInputisInGuess(guess, word, &input, size, wrongs);
-		checkIfWinOrLose(guess, word, wrongs);
+		checkIfWinOrLose(guess, word, wrongs, size);
 		initScreen(wrongs, word, size, guess);
 	}
 }
@@ -83,6 +88,7 @@ int main(){
 	char word[] = "TANGINA";
 	int size = sizeof(word) / sizeof(char);
 	char guess[size];
+	int num_of_correct_guesses = 0;
 	initGuess(guess, &size);
 	initScreen(&wrongs, word, &size, guess);
 	logic(&wrongs, word, &size, guess);
