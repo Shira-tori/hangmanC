@@ -1,1 +1,1 @@
-void printHangman(int *wrongs);
+void printHangman(ulong *wrongs);

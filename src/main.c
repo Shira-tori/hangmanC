@@ -1,96 +1,103 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "../headers/printHangman.h"
 
-int main();
+#define GAME_OVER 6
 
-void initScreen(int *wrongs, char word[], int *size, char guess[]){
+char* initGuess(int *num_of_char_in_word, char word[]){
+	char prevchar;
+	for(int i = 0; word[i] != '\0'; i++){
+		if(word[i] != prevchar){
+			*num_of_char_in_word = *num_of_char_in_word + 1;
+			prevchar = word[i];
+		}
+	}
+	char *guess = malloc(sizeof(char) * *num_of_char_in_word);
+
+	return guess;
+}
+
+void getCharInput(char *input){
+	*input = getchar();
+	while(getchar() != '\n');
+}
+
+int checkIfCharInString(char string[], char *charc){
+	for(int i = 0; string[i] != '\0'; i++){
+		if(string[i] == *charc){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_guesses){
 	system("clear");
 	printf("\t\tH A N G M A N\n");
 	printf("\t   M A D E   B Y   S E A N\n");
 	printHangman(wrongs);
 	printf("\n\n");
 	printf("\n");
-	for(int i = 0; i < *size; i++){
-		if(word[i] == guess[i]){
-			printf(" %c  ", guess[i]);
+	printf("\n");
+	for(int i = 0; word[i] != '\0'; i++){
+		if(checkIfCharInString(guess, &word[i])){
+			printf(" %c  ", word[i]);
+			continue;
 		}
-		else{
-			printf("    ");
-		}
+		printf("    ");
 	}
 	printf("\n");
-	for(int i = 0; i < *size-1; i++){
+	for(int i = 0; word[i] != '\0'; i++){
 		printf("___ ");
 	}
 	printf("\n\n");
 }
 
-void checkIfInputisInGuess(char guess[], char word[], char *input, int *size, int *wrongs){
-	// TODO: Find out how to check if input is right or wrong.
-	bool match = 0;
-	for(int i = 0; word[i] != '\0'; i++){
-		if(word[i] == input[0]){
-			printf("Nice!\n");
-			guess[i] = input[0];
-			match = 1;
-		}
-		else if(i == *size-2 && match == 0){
-			*wrongs = *wrongs + 1;
-		}
-	}
-}
-
-void checkIfWinOrLose(char guess[], char word[], int *wrongs, int *size){
-	if(*wrongs == 6){
-		initScreen(wrongs, word, size, guess);
-		printf("Game Over.\n");
-		while(1){
-			printf("Try again?[Y/N]: ");
-			switch(getchar()){
-				case 'Y':
-				case 'y':
-					while(getchar() != '\n');
-					main();
-					break;
-				case 'N':
-				case 'n':
-					exit(0);
-			}
-			while(getchar() != '\n');
-		}
-	}
-}
-
-void logic(int *wrongs, char word[], int *size, char guess[]){
-	char input;
-	char buffer;
-	while(1){
-		printf("Guess a letter: ");
-		input = getchar();
-		while((getchar()) != '\n');
-		checkIfInputisInGuess(guess, word, &input, size, wrongs);
-		checkIfWinOrLose(guess, word, wrongs, size);
-		initScreen(wrongs, word, size, guess);
-	}
-}
-
-void initGuess(char guess[], int *size){
-	for(int i = 0; i < *size; i++){
-		guess[i] = ' ';
-	}
-}
 
 
 int main(){
-	int wrongs = 0;
-	char word[] = "TANGINA";
-	int size = sizeof(word) / sizeof(char);
-	char guess[size];
+	char word[] = "WATERFALL";
+	char input;
+	int num_of_char_in_word;
 	int num_of_correct_guesses = 0;
-	initGuess(guess, &size);
-	initScreen(&wrongs, word, &size, guess);
-	logic(&wrongs, word, &size, guess);
+	ulong wrongs = 0;
+	ulong size = sizeof(word) / sizeof(char);
+
+	char *guess = initGuess(&num_of_char_in_word, word);
+	while(1){
+		initScreen(&wrongs, word, guess, &num_of_correct_guesses);
+		// TODO: Implement a winning system	
+		if(wrongs == GAME_OVER){
+			char choice;
+			printf("Game Over.\n");
+			printf("Try Again? [Y/N]: ");
+			getCharInput(&choice);
+			switch(choice){
+				case 'Y':
+				case 'y':
+					wrongs = 0;
+					continue;
+				case 'N':
+				case 'n':
+					free(guess);
+					break;
+			}
+			break;
+		}
+
+		printf("Guess: ");
+		getCharInput(&input);
+
+		if(!checkIfCharInString(word, &input)){
+			wrongs++;
+			continue;
+		}
+
+		if(!checkIfCharInString(guess, &input)){
+			guess[num_of_correct_guesses] = input;
+			num_of_correct_guesses++;
+		}
+
+	}
 	return 0;
 }

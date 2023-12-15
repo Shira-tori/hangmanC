@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void printHangman(int *wrongs){
+void printHangman(ulong *wrongs){
 	switch(*wrongs){
 		case 0:
 			printf("\t___________\n");
