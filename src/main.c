@@ -31,7 +31,8 @@ int checkIfCharInString(char string[], char *charc){
 	return 0;
 }
 
-void initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_guesses){
+int initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_guesses){
+	int counter = 0;
 	system("clear");
 	printf("\t\tH A N G M A N\n");
 	printf("\t   M A D E   B Y   S E A N\n");
@@ -42,6 +43,7 @@ void initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_gu
 	for(int i = 0; word[i] != '\0'; i++){
 		if(checkIfCharInString(guess, &word[i])){
 			printf(" %c  ", word[i]);
+			counter++;
 			continue;
 		}
 		printf("    ");
@@ -51,6 +53,7 @@ void initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_gu
 		printf("___ ");
 	}
 	printf("\n\n");
+	return counter;
 }
 
 
@@ -65,8 +68,11 @@ int main(){
 
 	char *guess = initGuess(&num_of_char_in_word, word);
 	while(1){
-		initScreen(&wrongs, word, guess, &num_of_correct_guesses);
-		// TODO: Implement a winning system	
+		int num_of_letters = initScreen(&wrongs, word, guess, &num_of_correct_guesses);
+		if(num_of_letters == size-1){
+			printf("You win!\n");
+			break;
+		}
 		if(wrongs == GAME_OVER){
 			char choice;
 			printf("Game Over.\n");
@@ -79,7 +85,6 @@ int main(){
 					continue;
 				case 'N':
 				case 'n':
-					free(guess);
 					break;
 			}
 			break;
@@ -99,5 +104,6 @@ int main(){
 		}
 
 	}
+	free(guess);
 	return 0;
 }
