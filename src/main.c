@@ -1,8 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <curl/curl.h>
 #include "../headers/printHangman.h"
 
 #define GAME_OVER 6
+
+int getSizeOfString(char *string){
+	int size = 0;
+	for(int i = 0; string[i] != '\0'; i++){
+		size++;
+	}
+	return size;
+}
 
 char* initGuess(int *num_of_char_in_word, char word[]){
 	char prevchar;
@@ -37,9 +46,7 @@ int initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_gue
 	printf("\t\tH A N G M A N\n");
 	printf("\t   M A D E   B Y   S E A N\n");
 	printHangman(wrongs);
-	printf("\n\n");
-	printf("\n");
-	printf("\n");
+	printf("\n\n\n\n");
 	for(int i = 0; word[i] != '\0'; i++){
 		if(checkIfCharInString(guess, &word[i])){
 			printf(" %c  ", word[i]);
@@ -59,17 +66,18 @@ int initScreen(ulong *wrongs, char word[], char guess[], int *num_of_correct_gue
 
 
 int main(){
-	char word[] = "WATERFALL";
+	printf("Picking a random word...\n");
+	char *word_to_guess = word();
 	char input;
 	int num_of_char_in_word;
 	int num_of_correct_guesses = 0;
 	ulong wrongs = 0;
-	ulong size = sizeof(word) / sizeof(char);
+	ulong size = getSizeOfString(word_to_guess);
 
-	char *guess = initGuess(&num_of_char_in_word, word);
+	char *guess = initGuess(&num_of_char_in_word, word_to_guess);
 	while(1){
-		int num_of_letters = initScreen(&wrongs, word, guess, &num_of_correct_guesses);
-		if(num_of_letters == size-1){
+		int num_of_letters = initScreen(&wrongs, word_to_guess, guess, &num_of_correct_guesses);
+		if(num_of_letters == size){
 			printf("You win!\n");
 			break;
 		}
@@ -82,6 +90,9 @@ int main(){
 				case 'Y':
 				case 'y':
 					wrongs = 0;
+					printf("Finding a new word...\n");
+					word_to_guess = word();
+					guess = initGuess(&num_of_char_in_word, word_to_guess);
 					continue;
 				case 'N':
 				case 'n':
@@ -90,10 +101,10 @@ int main(){
 			break;
 		}
 
-		printf("Guess: ");
+		printf("Guess a letter: ");
 		getCharInput(&input);
 
-		if(!checkIfCharInString(word, &input)){
+		if(!checkIfCharInString(word_to_guess, &input)){
 			wrongs++;
 			continue;
 		}
